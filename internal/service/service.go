@@ -48,6 +48,12 @@ func (s *subscriptionService) Create(ctx context.Context, req models.CreateSubsc
 		StartDate:   startDate,
 	}
 
+
+	//не учитываем копейки
+	if req.Price != int(req.Price) { 
+    return nil, fmt.Errorf("price must be an integer")
+	}
+
 	if req.EndDate != nil {
 		endDate, err := models.ParseDate(*req.EndDate)
 		if err != nil {
