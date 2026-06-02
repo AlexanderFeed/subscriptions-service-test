@@ -2,7 +2,7 @@ package main
 
 // @title        Subscriptions API
 // @version      1.0
-// @description  REST-сервис для агрегации данных об онлайн-подписках.
+// @description  6. Предоставить swagger-документацию к реализованному API\nREST-сервис для агрегации данных об онлайн-подписках.
 // @host         localhost:8080
 // @BasePath     /api/v1
 
