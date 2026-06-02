@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"time"
+	"regexp"
 
 	"github.com/google/uuid"
 )
@@ -107,10 +108,25 @@ type CostFilter struct {
 // --- Хелперы ---
 
 func ParseDate(s string) (time.Time, error) {
+	if s == "" {
+		return time.Time{}, fmt.Errorf("date cannot be empty")
+	}
+
+	// Для этого подключали регулярку
+	matched, _ := regexp.MatchString(`^\d{2}-\d{4}$`, s) // Послудующий вывод ошибки не только системный
+	if !matched {
+		return time.Time{}, fmt.Errorf("invalid date format %q, expected MM-YYYY (example: 07-2025)", s)
+	}
+
 	t, err := time.Parse(DateLayout, s)
 	if err != nil {
-		return time.Time{}, fmt.Errorf("invalid date format %q, expected MM-YYYY: %w", s, err)
+		return time.Time{}, fmt.Errorf("invalid date %q: %w", s, err)
 	}
+
+	if t.Month() < 1 || t.Month() > 12 {
+		return time.Time{}, fmt.Errorf("invalid month in date %q", s)
+	}
+
 	return t.UTC(), nil
 }
 

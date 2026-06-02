@@ -139,6 +139,15 @@ func (s *subscriptionService) Update(ctx context.Context, id uuid.UUID, req mode
 		return nil, err
 	}
 
+
+	if input.StartDate != nil && input.EndDate != nil {
+		if input.EndDate.Before(*input.StartDate) {
+			return nil, fmt.Errorf("end_date must be >= start_date") // Не путешествуем назад
+		}
+	}
+
+
+
 	s.logger.WithField("id", id).Info("subscription updated")
 	return models.ToResponse(sub), nil
 }
